@@ -42,7 +42,7 @@ $videos = array_slice($videos, ($page - 1) * $videosPerPage, $videosPerPage);
     <div class="max-w-4xl mx-auto">
         <h1 class="text-2xl font-bold mb-4">Live Stream</h1>
         <div class="w-full bg-black flex justify-center">
-            <img src="http://localhost:8081/0/stream" class="w-full max-w-lg" alt="Live Stream">
+            <img src="<?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . ':8081/0/stream' ?>" class="w-full max-w-lg" alt="Live Stream">
         </div>
 
         <h2 class="text-xl font-bold mt-8 mb-4">Recorded Videos</h2>
