@@ -22,7 +22,7 @@ $videos = glob("$videoDir/*.mp4");
             <?php foreach ($videos as $video): ?>
                 <?php $filename = basename($video); ?>
                 <div class="bg-gray-800 p-4 rounded-lg">
-                    <video class="w-full rounded-lg mb-2" controls>
+                    <video class="w-full rounded-lg mb-2" controls loading="lazy">
                         <source src="videos/<?= $filename ?>" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
