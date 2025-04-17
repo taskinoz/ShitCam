@@ -9,6 +9,31 @@ $videos = glob("$videoDir/*.mp4");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Motion Videos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        let video = entry.target;
+                        let source = video.querySelector("source");
+                        source.src = source.dataset.src;
+                        video.load();
+                        observer.unobserve(video);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            document.querySelectorAll("video").forEach(video => {
+                observer.observe(video);
+            });
+        });
+        
+        function confirmDelete(filename) {
+            if (confirm("Are you sure you want to delete " + filename + "?")) {
+                window.location.href = "delete.php?file=" + encodeURIComponent(filename);
+            }
+        }
+    </script>
 </head>
 <body class="bg-gray-900 text-white p-6">
     <div class="max-w-4xl mx-auto">
@@ -22,11 +47,14 @@ $videos = glob("$videoDir/*.mp4");
             <?php foreach ($videos as $video): ?>
                 <?php $filename = basename($video); ?>
                 <div class="bg-gray-800 p-4 rounded-lg">
-                    <video class="w-full rounded-lg mb-2" controls loading="lazy">
-                        <source src="videos/<?= $filename ?>" type="video/mp4">
+                    <video class="w-full rounded-lg mb-2" controls>
+                        <source data-src="videos/<?= $filename ?>" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <a href="download.php?file=<?= urlencode($filename) ?>" class="block text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Download</a>
+                    <div class="flex justify-between">
+                        <a href="download.php?file=<?= urlencode($filename) ?>" class="text-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Download</a>
+                        <button onclick="confirmDelete('<?= $filename ?>')" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">Delete</button>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
