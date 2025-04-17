@@ -1,6 +1,17 @@
 <?php
 $videoDir = '/var/lib/motion';
 $videos = glob("$videoDir/*.mp4");
+
+// Get sort order from query params
+$sortOrder = $_GET['sort'] ?? 'newest';
+
+// Sort videos based on query parameter
+usort($videos, function ($a, $b) use ($sortOrder) {
+    if ($sortOrder === 'oldest') {
+        return filemtime($a) - filemtime($b);
+    }
+    return filemtime($b) - filemtime($a);
+});
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +54,14 @@ $videos = glob("$videoDir/*.mp4");
         </div>
 
         <h2 class="text-xl font-bold mt-8 mb-4">Recorded Videos</h2>
+        <div class="mb-4">
+            <label class="text-white">Sort by:</label>
+            <select onchange="window.location.href='?sort=' + this.value" class="bg-gray-800 text-white px-2 py-1 rounded">
+                <option value="newest" <?= $sortOrder === 'newest' ? 'selected' : '' ?>>Newest</option>
+                <option value="oldest" <?= $sortOrder === 'oldest' ? 'selected' : '' ?>>Oldest</option>
+            </select>
+        </div>
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <?php foreach ($videos as $video): ?>
                 <?php $filename = basename($video); ?>
