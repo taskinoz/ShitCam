@@ -19,3 +19,7 @@ sudo ln -s /var/lib/motion /var/www/html/videos
 ```
 
 4. Add the php files in the `src` directory to the web server directory
+
+## Screenshot
+
+![Screenshot](./assets/shitcam-site.png)
